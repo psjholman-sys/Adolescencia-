@@ -1,0 +1,589 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro Digital: Desarrollo y Salud en la Adolescencia</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para visualización de datos y gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome para iconografía -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .font-serif-title {
+            font-family: 'Merriweather', serif;
+        }
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: hidden !important;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-slate-100">
+
+    <!-- BARRA LATERAL / NAVEGACIÓN DEL LIBRO -->
+    <aside class="w-72 bg-slate-900 text-white flex flex-col justify-between hidden md:flex shadow-xl z-20">
+        <div class="p-6">
+            <div class="flex items-center space-x-3 mb-8">
+                <i class="fa-solid fa-book-open text-indigo-400 text-2xl"></i>
+                <h1 class="font-serif-title font-bold text-lg tracking-wide text-slate-100">BioPsico Adolescencia</h1>
+            </div>
+            <p class="text-xs text-slate-400 uppercase font-semibold tracking-wider mb-4">Capítulos del Libro</p>
+            <nav class="space-y-1 text-sm">
+                <button onclick="showPage('cap1')" id="nav-cap1" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white font-medium transition">
+                    <i class="fa-solid fa-brain w-5"></i>
+                    <span>1. Conceptos y Pubertad</span>
+                </button>
+                <button onclick="showPage('cap2')" id="nav-cap2" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-dna w-5"></i>
+                    <span>2. Maduración y Crecimiento</span>
+                </button>
+                <button onclick="showPage('cap3')" id="nav-cap3" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-heart-pulse w-5"></i>
+                    <span>3. Salud Física y Mental</span>
+                </button>
+                <button onclick="showPage('cap4')" id="nav-cap4" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-shield-halved w-5"></i>
+                    <span>4. Factores de Riesgo y Protección</span>
+                </button>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+            Dashboard Interactivo de Psicología del Desarrollo
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL / HOJAS DEL LIBRO -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+        
+        <!-- HEADER MÓVIL Y BREADCRUMB -->
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <span id="chapter-badge" class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Capítulo 1</span>
+                <h2 id="chapter-title" class="text-xl font-bold text-slate-800 font-serif-title">Concepto de la Adolescencia e Indicadores Puberales</h2>
+            </div>
+            <div class="text-xs text-slate-400 hidden sm:block">
+                Haz clic en las tarjetas de imagen para ver el concepto e investigaciones
+            </div>
+        </header>
+
+        <!-- ÁREA DE LECTURA SCROLLABLE -->
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 space-y-10">
+
+            <!-- CAPÍTULO 1: CONCEPTOS, PUBERTAD Y CAMBIOS -->
+            <section id="cap1" class="page-content active space-y-8">
+                
+                <!-- INTRODUCCIÓN Y CONCEPTO -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Tarjeta Interactiva 1 -->
+                    <div onclick="openModal('mod-adolescencia')" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer transform hover:-translate-y-1 hover:shadow-md transition group">
+                        <div class="h-44 bg-slate-800 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80" alt="Adolescentes" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90">
+                            <span class="absolute bottom-3 right-3 bg-slate-900/80 text-white text-xs px-2 py-1 rounded backdrop-blur-sm"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Explorar</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-indigo-600 transition">Concepto de Adolescencia</h3>
+                            <p class="text-slate-600 text-sm line-clamp-2">Transición biológica, psicológica y social que marca la construcción de la identidad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Interactiva 2 -->
+                    <div onclick="openModal('mod-transicion')" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer transform hover:-translate-y-1 hover:shadow-md transition group">
+                        <div class="h-44 bg-slate-800 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?auto=format&fit=crop&w=600&q=80" alt="Transición" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90">
+                            <span class="absolute bottom-3 right-3 bg-slate-900/80 text-white text-xs px-2 py-1 rounded backdrop-blur-sm"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Explorar</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-indigo-600 transition">Fin de la Niñez y Transición</h3>
+                            <p class="text-slate-600 text-sm line-clamp-2">El abandono gradual del estado de latencia y la reorganización neural.</p>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Interactiva 3 -->
+                    <div onclick="openModal('mod-pubertad')" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer transform hover:-translate-y-1 hover:shadow-md transition group">
+                        <div class="h-44 bg-slate-800 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80" alt="Pubertad" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90">
+                            <span class="absolute bottom-3 right-3 bg-slate-900/80 text-white text-xs px-2 py-1 rounded backdrop-blur-sm"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Explorar</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-slate-800 text-lg mb-2 group-hover:text-indigo-600 transition">Indicios de la Pubertad</h3>
+                            <p class="text-slate-600 text-sm line-clamp-2">Primeras manifestaciones neuroendocrinas y variaciones entre ambos sexos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUADRO COMPARATIVO FÍSICO VS PSICOLÓGICO -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 font-serif-title border-b pb-2 flex items-center">
+                        <i class="fa-solid fa-table-list text-indigo-600 mr-2"></i>
+                        Cambios Físicos vs. Cambios Psicológicos en la Adolescencia
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-semibold uppercase text-xs">
+                                <tr>
+                                    <th class="p-3 rounded-l-lg">Dimensión</th>
+                                    <th class="p-3">Manifestaciones Físicas / Biológicas</th>
+                                    <th class="p-3 rounded-r-lg">Manifestaciones Psicológicas / Emocionales</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 font-semibold text-slate-800">Pubertad Temprana</td>
+                                    <td class="p-3">Activación del eje HPG, secreción de GnRH, desarrollo inicial del botón mamario / aumento testicular.</td>
+                                    <td class="p-3">Labilidad emocional, reactividad del sistema límbico, búsqueda de autonomía frente a los padres.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 font-semibold text-slate-800">Pubertad Media</td>
+                                    <td class="p-3">Estirón del crecimiento, aparición del vello púbico/axilar, menarquía y espermarquia.</td>
+                                    <td class="p-3">Preocupación intensa por la imagen corporal, egocentrismo adolescente (audiencia imaginaria), mayor peso del grupo de pares.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 font-semibold text-slate-800">Adolescencia Tardía</td>
+                                    <td class="p-3">Fusión de las epífisis óseas, desarrollo completo de características secundarias.</td>
+                                    <td class="p-3">Consolidación de la identidad, maduración de la corteza prefrontal (autorregulación, planificación a largo plazo).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- OPORTUNIDADES Y RIESGOS DE LA PUBERTAD -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-xl">
+                        <h4 class="font-bold text-emerald-800 mb-2 flex items-center"><i class="fa-solid fa-seedling mr-2"></i> Oportunidades del Desarrollo Puberal</h4>
+                        <ul class="text-sm text-emerald-900 space-y-2 list-disc list-inside">
+                            <li><strong>Plasticidad cerebral elevada:</strong> Optimización de circuitos neuronales mediante la poda sináptica.</li>
+                            <li><strong>Flexibilidad cognitiva:</strong> Capacidad avanzada para el pensamiento abstracto y razonamiento moral.</li>
+                            <li><strong>Construcción de redes sociales:</strong> Afiliación a grupos de pares que fortalecen la empatía y habilidades sociales.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-rose-50 border border-rose-200 p-5 rounded-xl">
+                        <h4 class="font-bold text-rose-800 mb-2 flex items-center"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Riesgos Asociados a la Pubertad</h4>
+                        <ul class="text-sm text-rose-900 space-y-2 list-disc list-inside">
+                            <li><strong>Descalce madurativo:</strong> Desarrollo del límbico (emocional) previo a la corteza prefrontal (control).</li>
+                            <li><strong>Vulnerabilidad a psicopatologías:</strong> Incremento en el riesgo de ansiedad, depresión y TCA.</li>
+                            <li><strong>Conductas de asunción de riesgo:</strong> Sensibilidad aumentada a la recompensa e impulsividad.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CAPÍTULO 2: MADURACIÓN SEXUAL Y CRECIMIENTO -->
+            <section id="cap2" class="page-content space-y-8">
+                
+                <!-- GRÁFICO ESTIRÓN DE CRECIMIENTO -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 font-serif-title">El Estirón de Crecimiento en la Adolescencia</h3>
+                            <p class="text-xs text-slate-500">Comparativa del ritmo de velocidad de crecimiento en estatura (cm/año) por sexo.</p>
+                        </div>
+                        <button onclick="openModal('mod-estiron')" class="mt-2 md:mt-0 text-xs bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg border border-indigo-200 font-semibold hover:bg-indigo-100">
+                            <i class="fa-solid fa-microscope mr-1"></i> Ver Tendencia Investigativa
+                        </button>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- CARACTERÍSTICAS SEXUALES Y MADUREZ -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Tarjeta Características Primarias vs Secundarias -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h4 class="font-bold text-slate-800 mb-3 border-b pb-2 flex items-center">
+                            <i class="fa-solid fa-venus-mars text-indigo-500 mr-2"></i> Características Sexuales
+                        </h4>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <span class="font-semibold text-slate-700 block mb-1">Primarias (Órganos reproductivos):</span>
+                                <p class="text-slate-600 text-xs leading-relaxed">Directamente vinculadas con la reproducción. Incluyen útero, ovarios y vagina en mujeres; testículos, pene y vesículas seminales en hombres.</p>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-slate-700 block mb-1">Secundarias (Signos fisiológicos):</span>
+                                <p class="text-slate-600 text-xs leading-relaxed">Sin relación directa con la reproducción. Ensanchamiento de hombros/caderas, desarrollo de mamas, cambio del timbre de voz, vello corporal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Madurez Sexual e Influencia Hormonal -->
+                    <div onclick="openModal('mod-hormonas')" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 cursor-pointer hover:border-indigo-300 transition">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-800 mb-3 flex items-center">
+                                <i class="fa-solid fa-flask-vial text-purple-500 mr-2"></i> Indicios de Madurez Sexual
+                            </h4>
+                            <span class="text-xs bg-purple-100 text-purple-700 font-semibold px-2 py-0.5 rounded">Detalles</span>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2 mb-4">
+                            <li><strong>Espermarquia:</strong> Primera eyaculación masculina (~13 años), comúnmente mediante polución nocturna.</li>
+                            <li><strong>Menarquía:</strong> Primera menstruación femenina (~12-13 años), signo central de maduración reproductora.</li>
+                            <li><strong>Eje Hormonal:</strong> La leptina activa la Kisspeptina, desencadenando la liberación de GnRH, LH y FSH.</li>
+                        </ul>
+                        <p class="text-xs text-indigo-600 font-semibold"><i class="fa-solid fa-circle-info mr-1"></i> Clic para ver el papel crucial de la alimentación.</p>
+                    </div>
+
+                </div>
+
+                <!-- CURIOSIDAD: ATRACCIÓN SEXUAL -->
+                <div class="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+                    <h4 class="font-bold text-amber-900 text-base mb-2 flex items-center">
+                        <i class="fa-solid fa-lightbulb text-amber-600 mr-2"></i>
+                        Cuadro de Curiosidades: La Atracción Sexual en Desarrollo
+                    </h4>
+                    <p class="text-sm text-amber-800 leading-relaxed mb-3">
+                        ¿Sabías que la atracción sexual suele preceder a la madurez sexual fisiológica? Investigaciones neurobiológicas demuestran que la glándula suprarrenocortical empieza a secretar andrógenos (DHEA) alrededor de los 6 a 8 años (adrenarquía), desencadenando la primera atracción erótica consciente aproximadamente a los 10 años, mucho antes de la menarquía o espermarquia.
+                    </p>
+                    <button onclick="openModal('mod-atraccion')" class="text-xs font-bold text-amber-900 underline hover:text-amber-700">Leer más sobre identidad y orientación sexual en el cerebro adolescente &rarr;</button>
+                </div>
+
+            </section>
+
+            <!-- CAPÍTULO 3: SALUD FÍSICA Y MENTAL EN LA ACTUALIDAD -->
+            <section id="cap3" class="page-content space-y-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Tarjeta Salud Física -->
+                    <div onclick="openModal('mod-saludfisica')" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer group">
+                        <div class="h-40 bg-slate-800 relative">
+                            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80" alt="Salud Fisica" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90">
+                            <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold">Cifras Recientes</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-slate-800 text-lg mb-2">Actividad Física, Sueño y Nutrición</h3>
+                            <p class="text-slate-600 text-xs mb-3">Más del 80% de los adolescentes globalmente no alcanzan las recomendaciones OMS de actividad física. Las necesidades de sueño oscilan entre 8-10 horas.</p>
+                            <span class="text-xs font-semibold text-indigo-600">Ver hábitos y descalce circadiano &rarr;</span>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta TCA e Imagen Corporal -->
+                    <div onclick="openModal('mod-tca')" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden cursor-pointer group">
+                        <div class="h-40 bg-slate-800 relative">
+                            <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80" alt="Imagen Corporal" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90">
+                            <span class="absolute top-3 left-3 bg-rose-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold">Salud Mental / TCA</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-slate-800 text-lg mb-2">Imagen Corporal, Anorexia y Bulimia</h3>
+                            <p class="text-slate-600 text-xs mb-3">Estudio de distorsión perceptiva, prevalencia de Obesidad, Anorexia Nerviosa y Bulimia. Estrategias de tratamiento y pronósticos.</p>
+                            <span class="text-xs font-semibold text-rose-600">Ver tratamientos e investigación &rarr;</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RESUMEN ESTADÍSTICO / CIFRAS CLAVE -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-2xl font-bold text-indigo-600">81%</span>
+                        <span class="text-xs text-slate-500 font-medium">Inactividad física (OMS)</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-2xl font-bold text-purple-600">70%</span>
+                        <span class="text-xs text-slate-500 font-medium">Déficit crónico de sueño</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-2xl font-bold text-rose-600">14%</span>
+                        <span class="text-xs text-slate-500 font-medium">Prevalencia global TCA</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="block text-2xl font-bold text-emerald-600">1 de 7</span>
+                        <span class="text-xs text-slate-500 font-medium">Adolescentes con patología mental</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- CAPÍTULO 4: FACTORES DE RIESGO Y PROTECCIÓN -->
+            <section id="cap4" class="page-content space-y-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Tarjeta Consumo de Sustancias -->
+                    <div onclick="openModal('mod-sustancias')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition">
+                        <div class="text-rose-500 mb-3"><i class="fa-solid fa-vial-circle-check text-2xl"></i></div>
+                        <h4 class="font-bold text-slate-800 text-base mb-2">Consumo de Sustancias</h4>
+                        <p class="text-slate-600 text-xs mb-3">Vapeo, alcohol y cannabis: Factores determinantes y alteración del neuromadurativo cerebral.</p>
+                        <span class="text-xs font-semibold text-rose-600">Ver factores y tendencias &rarr;</span>
+                    </div>
+
+                    <!-- Tarjeta ITS y Salud Sexual -->
+                    <div onclick="openModal('mod-its')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition">
+                        <div class="text-indigo-500 mb-3"><i class="fa-solid fa-shield-virus text-2xl"></i></div>
+                        <h4 class="font-bold text-slate-800 text-base mb-2">Salud Sexual e ITS</h4>
+                        <p class="text-slate-600 text-xs mb-3">Epidemiología de ITS en la juventud, baja percepción de riesgo y educación afectivo-sexual.</p>
+                        <span class="text-xs font-semibold text-indigo-600">Ver prevención y cifras &rarr;</span>
+                    </div>
+
+                    <!-- Tarjeta Depresión y Mortalidad -->
+                    <div onclick="openModal('mod-depresion')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition">
+                        <div class="text-purple-500 mb-3"><i class="fa-solid fa-heart-crack text-2xl"></i></div>
+                        <h4 class="font-bold text-slate-800 text-base mb-2">Depresión y Suicidio</h4>
+                        <p class="text-slate-600 text-xs mb-3">Causas principales de mortalidad adolescente, señales de alerta e intervención clínica.</p>
+                        <span class="text-xs font-semibold text-purple-600">Ver tendencias de salud mental &rarr;</span>
+                    </div>
+
+                </div>
+
+                <!-- FACTORES DE PROTECCIÓN: SALUD EN EL CONTEXTO -->
+                <div class="bg-indigo-900 text-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-lg font-bold mb-3 font-serif-title flex items-center">
+                        <i class="fa-solid fa-hands-holding-child text-indigo-400 mr-2"></i>
+                        Factores de Protección: La Salud en el Contexto Socioecológico
+                    </h3>
+                    <p class="text-sm text-indigo-100 leading-relaxed mb-4">
+                        Siguiendo el modelo bioecológico de Bronfenbrenner, los factores de protección amortiguan el impacto de las vulnerabilidades biológicas e imponderables del entorno.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-indigo-800/60 p-3 rounded-lg border border-indigo-700">
+                            <span class="font-bold block text-indigo-200 mb-1">Microsistema Familiar</span>
+                            Monitoreo parental cálido, apego seguro, comunicación abierta y rutinas compartidas.
+                        </div>
+                        <div class="bg-indigo-800/60 p-3 rounded-lg border border-indigo-700">
+                            <span class="font-bold block text-indigo-200 mb-1">Entorno Escolar y Pares</span>
+                            Pertenencia a la comunidad educativa, mentorías positivas y grupos de pares prosociales.
+                        </div>
+                        <div class="bg-indigo-800/60 p-3 rounded-lg border border-indigo-700">
+                            <span class="font-bold block text-indigo-200 mb-1">Macrosistema Comunitario</span>
+                            Acceso a servicios de salud mental amigables para jóvenes y espacios recreativos seguros.
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- VENTANA MODAL FLOTANTE DEDICADA A CONCEPTOS E INVESTIGACIÓN -->
+    <div id="modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+        <div onclick="closeModal()" class="modal-overlay absolute w-full h-full bg-slate-900/60 backdrop-blur-sm"></div>
+        
+        <div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded-xl shadow-2xl z-50 overflow-y-auto max-h-[90vh]">
+            
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 id="modal-title" class="text-lg font-bold text-slate-800 font-serif-title">Título del Concepto</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- Sección Concepto -->
+                <div>
+                    <h4 class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2 flex items-center">
+                        <i class="fa-solid fa-book text-indigo-500 mr-2"></i> Concepto Clave
+                    </h4>
+                    <p id="modal-concept" class="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-100">
+                        Cargando información...
+                    </p>
+                </div>
+
+                <!-- Sección Tendencia Investigativa -->
+                <div>
+                    <h4 class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center">
+                        <i class="fa-solid fa-chart-line text-emerald-500 mr-2"></i> Tendencia Investigativa Actual
+                    </h4>
+                    <p id="modal-research" class="text-sm text-slate-700 leading-relaxed bg-emerald-50/50 p-4 rounded-lg border border-emerald-100">
+                        Cargando investigación...
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()" class="bg-indigo-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE INTERACTIVIDAD Y CONFIGURACIÓN DEL DASHBOARD -->
+    <script>
+        // BASE DE DATOS DE CONCEPTOS E INVESTIGACIONES
+        const contentDB = {
+            'mod-adolescencia': {
+                title: 'Concepto de Adolescencia',
+                concept: 'La adolescencia es un periodo del desarrollo biopsicosocial comprendido aproximadamente entre los 10 y 19 años (OMS). Involucra cambios neurobiológicos profundos, reorganización de la identidad personal y la transición hacia el rol adulto autónomo.',
+                research: 'Las neurociencias contemporáneas sostienen que la adolescencia se extiende evolutivamente hasta los 24-25 años debido a la maduración tardía de la corteza prefrontal mielinizada. Se enfatiza el concepto de "neuroplasticidad adaptativa".'
+            },
+            'mod-transicion': {
+                title: 'Fin de la Niñez y Transición Desarrollo Físico',
+                concept: 'Marca el paso del estado de estancamiento somático relativo hacia la reactivación neuroendocrina. Se caracteriza por la pérdida de características infantiles y el rápido reacondicionamiento del esquema corporal.',
+                research: 'Estudios epigenéticos analizan cómo el estrés psicosocial temprano (adversidad en la infancia) acelera el ritmo de la transición puberal, fenómeno conocido como la "Hipótesis de la Aceleración Psicobiológica".'
+            },
+            'mod-pubertad': {
+                title: 'Indicios e Inicio de la Pubertad',
+                concept: 'Proceso de maduración sexual biológica que inicia con la reactivación del eje Hipotálamo-Hipófisis-Gonadal (HPG). En niñas suele comenzar entre los 8 y 13 años (telarquia); en niños entre los 9.5 y 14 años (aumento testicular).',
+                research: 'Tendencia hacia la "secularización de la pubertad": Investigaciones globales registran un adelanto en la edad de inicio puberal (especialmente telarquia), correlacionado con disrupción endocrina ambiental y obesidad infantil.'
+            },
+            'mod-estiron': {
+                title: 'Estirón de Crecimiento',
+                concept: 'Aceleración rápida de la estatura y peso corporal mediada por la hormona del crecimiento (GH) y esteroides sexuales. Las mujeres alcanzan el Pico de Velocidad de Crecimiento (PHV) antes (~12 años) que los varones (~14 años).',
+                research: 'Investigaciones de densidad mineral ósea indican que cerca del 40% de la masa ósea adulta se acumula durante este periodo de aceleración, destacando la ventana crítica de intervención nutricional.'
+            },
+            'mod-hormonas': {
+                title: 'Cambios Hormonales y Alimentación',
+                concept: 'La menarquía y espermarquia marcan la capacidad funcional reproductora. La hormona Leptina (producida en el tejido adiposo) actúa como señal permisiva metabólica para que el hipotálamo libere GnRH.',
+                research: 'Estudios de nutrición endocrina demuestran cómo dietas hiperprocesadas o restricción calórica extrema alteran los patrones de pulsatilidad de la gonadotropina, pudiendo retrasar o suspender la función menstrual (amenorrea funcional).'
+            },
+            'mod-atraccion': {
+                title: 'Atracción Sexual en el Desarrollo',
+                concept: 'Surgimiento del deseo erótico, fantasías y atracción afectivo-sexual impulsados inicialmente por la adrenarquía (andrógenos suprarrenales) a los 9-10 años de edad.',
+                research: 'Estudios actuales de diversidad sexual se enfocan en los modelos de consolidación de la identidad LGTBIQ+ en etapas tempranas, destacando que el apoyo afirmativo reduce significativamente la ideación suicida.'
+            },
+            'mod-saludfisica': {
+                title: 'Salud Física, Sueño y Hábitos',
+                concept: 'La salud física integra el estado metabólico, patrones de descanso e ingesta nutricional. En la adolescencia ocurre un retraso natural de la fase del sueño (descalce circadiano).',
+                research: 'La "Cronobiología Adolescente" respalda el retraso del horario de inicio escolar; investigaciones comprueban que retrasar 30-60 minutos la entrada a la escuela mejora el rendimiento académico y reduce la sintomatología depresiva.'
+            },
+            'mod-tca': {
+                title: 'Imagen Corporal, Anorexia y Bulimia',
+                concept: 'La imagen corporal es la representación mental del propio cuerpo. La Anorexia Nerviosa (restricción severa) y Bulimia Nerviosa (atracones/purgas) son TCA severos con alta morbimortalidad.',
+                research: 'Investigación sobre el impacto de redes sociales (TikTok/Instagram) y algoritmos que promueven la dismorfia corporal. Intervenciones basadas en la "Terapia Cognitivo-Conductual Mejorada (CBT-E)" muestran las mayores tasas de remisión.'
+            },
+            'mod-sustancias': {
+                title: 'Consumo y Abuso de Sustancias',
+                concept: 'Patrones de ingesta de drogas legales o ilegales. La corteza prefrontal inmadura incrementa la vulnerabilidad a la adicción por alta neuroplasticidad.',
+                research: 'Tendencias actuales muestran un cambio de paradigma: reducción del consumo de alcohol tradicional frente a un incremento exponencial del cigarrillo electrónico (vapeo) y cannabis de alta potencia.'
+            },
+            'mod-its': {
+                title: 'Enfermedades de Transmisión Sexual (ITS)',
+                concept: 'Infecciones transmitidas por contacto sexual (VPH, Gonorrea, Clamidia, VIH). La falta de maduración del epitelio cervical en mujeres jóvenes incrementa la susceptibilidad biológica.',
+                research: 'Investigación en intervenciones digitales (Mobile Health) para la educación sexual integral y el fomento del uso sistemático del preservativo, superando los estigmas de las clínicas tradicionales.'
+            },
+            'mod-depresion': {
+                title: 'Depresión, Suicidio y Salud Mental',
+                concept: 'Trastornos del estado de ánimo caracterizados por anhedonia y tristeza persistente. El suicidio es la 3ª causa principal de muerte entre los 15 y 19 años.',
+                research: 'La neurobiología de la autolesión no suicida (ALNS) como estrategia inadaptativa de regulación emocional. Programas de entrenamiento en Dialéctica Conductual (DBT) han demostrado alta eficacia.'
+            }
+        };
+
+        // GESTIÓN DE NAVEGACIÓN
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+            const activeBtn = document.getElementById('nav-' + pageId);
+            activeBtn.classList.add('bg-indigo-600', 'text-white');
+            activeBtn.classList.remove('text-slate-300');
+
+            // Actualizar Títulos del Header
+            const chapterTitles = {
+                'cap1': 'Concepto de la Adolescencia e Indicadores Puberales',
+                'cap2': 'Maduración Sexual, Crecimiento y Hormonas',
+                'cap3': 'Salud Física, Mental, Nutrición y TCA',
+                'cap4': 'Factores de Riesgo, ITS y Entorno Socioecológico'
+            };
+            const chapterBadges = {
+                'cap1': 'Capítulo 1',
+                'cap2': 'Capítulo 2',
+                'cap3': 'Capítulo 3',
+                'cap4': 'Capítulo 4'
+            };
+            document.getElementById('chapter-title').innerText = chapterTitles[pageId];
+            document.getElementById('chapter-badge').innerText = chapterBadges[pageId];
+        }
+
+        // GESTIÓN DE VENTANA MODAL
+        function openModal(key) {
+            const data = contentDB[key];
+            if (!data) return;
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-concept').innerText = data.concept;
+            document.getElementById('modal-research').innerText = data.research;
+
+            const modal = document.getElementById('modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('modal-active');
+        }
+
+        // INICIALIZACIÓN DE CHART.JS (Estirón de Crecimiento)
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['8 años', '10 años', '12 años', '14 años', '16 años', '18 años'],
+                    datasets: [
+                        {
+                            label: 'Mujeres (cm/año)',
+                            data: [5.5, 6.5, 8.5, 3.0, 1.0, 0.2],
+                            borderColor: '#ec4899',
+                            backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Varones (cm/año)',
+                            data: [5.0, 5.2, 6.0, 9.5, 4.5, 1.2],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' cm/año';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            title: { display: true, text: 'Velocidad de Crecimiento (cm/año)' },
+                            min: 0,
+                            max: 11
+                        },
+                        x: {
+                            title: { display: true, text: 'Edad Aproximada' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
